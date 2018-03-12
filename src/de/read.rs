@@ -1,4 +1,7 @@
-use std::io;
+use alloc::{Vec};
+use alloc::boxed::Box;
+
+use core_io as io;
 use error::Result;
 use serde;
 
@@ -95,7 +98,7 @@ impl<'storage> BincodeRead<'storage> for SliceReader<'storage> {
             return Err(SliceReader::unexpected_eof());
         }
 
-        let string = match ::std::str::from_utf8(&self.slice[..length]) {
+        let string = match ::core::str::from_utf8(&self.slice[..length]) {
             Ok(s) => s,
             Err(e) => return Err(ErrorKind::InvalidUtf8Encoding(e).into()),
         };
@@ -159,7 +162,7 @@ where
     {
         self.fill_buffer(length)?;
 
-        let string = match ::std::str::from_utf8(&self.temp_buffer[..]) {
+        let string = match ::core::str::from_utf8(&self.temp_buffer[..]) {
             Ok(s) => s,
             Err(e) => return Err(::ErrorKind::InvalidUtf8Encoding(e).into()),
         };
@@ -170,7 +173,7 @@ where
 
     fn get_byte_buffer(&mut self, length: usize) -> Result<Vec<u8>> {
         self.fill_buffer(length)?;
-        Ok(::std::mem::replace(&mut self.temp_buffer, Vec::new()))
+        Ok(::core::mem::replace(&mut self.temp_buffer, Vec::new()))
     }
 
     fn forward_read_bytes<V>(&mut self, length: usize, visitor: V) -> Result<V::Value>

@@ -1,3 +1,6 @@
+#![no_std]
+#![feature(alloc)]
+
 #![deny(missing_docs)]
 
 //! Bincode is a crate for encoding and decoding using a tiny binary
@@ -24,9 +27,15 @@
 #![crate_type = "rlib"]
 #![crate_type = "dylib"]
 
-extern crate byteorder;
 extern crate serde;
+extern crate core_io;
 
+#[macro_use]
+extern crate alloc;
+
+use alloc::{Vec};
+
+mod byteorder;
 mod config;
 mod ser;
 mod error;
@@ -78,7 +87,7 @@ pub fn config() -> Config {
 /// is returned and *no bytes* will be written into the `Writer`.
 pub fn serialize_into<W, T: ?Sized>(writer: W, value: &T) -> Result<()>
 where
-    W: std::io::Write,
+    W: core_io::Write,
     T: serde::Serialize,
 {
     config().serialize_into(writer, value)
@@ -97,7 +106,7 @@ where
 /// If this returns an `Error`, `reader` may be in an invalid state.
 pub fn deserialize_from<R, T>(reader: R) -> Result<T>
 where
-    R: std::io::Read,
+    R: core_io::Read,
     T: serde::de::DeserializeOwned,
 {
     config().deserialize_from(reader)
@@ -159,7 +168,7 @@ where A: DeserializerAcceptor<'a>,
 #[doc(hidden)]
 pub fn with_serializer<A, W>(writer: W, acceptor: A) -> A::Output
 where A: SerializerAcceptor,
-    W: std::io::Write
+    W: core_io::Write
 {
     config().with_serializer(writer, acceptor)
 }

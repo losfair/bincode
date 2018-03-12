@@ -1,10 +1,12 @@
+use alloc::{Vec};
+
 use super::internal::{Bounded, Infinite, SizeLimit};
 use ::error::Result;
 use byteorder::{BigEndian, ByteOrder, LittleEndian, NativeEndian};
 use {DeserializerAcceptor, SerializerAcceptor};
 use serde;
-use std::io::{Write, Read};
-use std::marker::PhantomData;
+use core_io::{Write, Read};
+use core::marker::PhantomData;
 use de::read::BincodeRead;
 
 use self::LimitOption::*;

@@ -1,4 +1,7 @@
-use std::io::{Read, Write};
+use alloc::{Vec};
+use alloc::boxed::Box;
+
+use core_io::{Read, Write};
 use serde;
 
 use config::{Options, OptionsExt};
@@ -32,7 +35,7 @@ where
     T: serde::Serialize,
     O: Options,
 {
-    let mut writer = {
+    let mut writer: Vec<u8> = {
         let actual_size = serialized_size(value, &mut options)?;
         Vec::with_capacity(actual_size as usize)
     };

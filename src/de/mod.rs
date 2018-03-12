@@ -1,12 +1,15 @@
-use std::io::Read;
+use alloc::{Vec, String};
+use alloc::boxed::Box;
+
+use core_io::Read;
 use ::config::Options;
 
 use serde;
 use byteorder::ReadBytesExt;
 use serde::de::IntoDeserializer;
 use serde::de::Error as DeError;
-use ::{Error, ErrorKind, Result};
-use ::internal::SizeLimit;
+use super::{Error, ErrorKind, Result};
+use super::internal::SizeLimit;
 use self::read::BincodeRead;
 
 pub mod read;
@@ -43,7 +46,7 @@ impl<'de, R: BincodeRead<'de>, O: Options> Deserializer<R, O> {
     }
 
     fn read_type<T>(&mut self) -> Result<()> {
-        use std::mem::size_of;
+        use core::mem::size_of;
         self.read_bytes(size_of::<T>() as u64)
     }
 
@@ -138,7 +141,7 @@ where
     where
         V: serde::de::Visitor<'de>,
     {
-        use std::str;
+        use core::str;
 
         let error = || ErrorKind::InvalidCharEncoding.into();
 

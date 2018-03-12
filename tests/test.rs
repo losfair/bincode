@@ -392,7 +392,7 @@ fn test_multi_strings_serialize() {
 
 #[test]
 fn test_oom_protection() {
-    use std::io::Cursor;
+    use core_io::Cursor;
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     struct FakeVec {
         len: u64,
